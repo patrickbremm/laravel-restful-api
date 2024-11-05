@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -78,11 +79,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (!$post) {
-            return response()->json([
-                'message' => 'Post não encontrado.'
-            ], 404);
-        }
+        // Essa validação abaixo não faz sentido, dado que o Laravel valida antes se o POST não é encontrado
+        // a partir disso foi implementado em bootstrap/app.php o retorno para quando der 404 no endpoint /posts
+        // if (!$post) {
+        //     return response()->json([
+        //         'message' => 'Post não encontrado.'
+        //     ], 404);
+        // }
+        // Validar se o usuário foi ele que criou e assim pode excluir o post (PostPolicy.php)
+        Gate::authorize('delete', $post);
         // Soft delete do post
         $post->delete();
         // Disparando o evento PostDeleted
