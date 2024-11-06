@@ -20,9 +20,9 @@ class PostPolicy
     }
 
     // Verifica se o usuário pode deletar o post
-    public function delete(User $user, Post $post): Response
+    public function canChangePost(User $user, Post $post): Response
     {
-        // Permitir deletar apenas se o usuário for o autor do post
+        // Permitir atualizar/deletar apenas se o usuário for o autor do post
         return $user->id === $post->user_id
             ? Response::allow()
             : Response::deny('Você não é o criador do Post.');

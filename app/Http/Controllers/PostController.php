@@ -54,6 +54,8 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        // Validar se o usuário foi ele que criou e assim pode excluir o post (PostPolicy.php)
+        Gate::authorize('canChangePost', $post);
         // Validação dos dados (Ele pega as rules da classe PostRequest importada)
         $validatedData = $request->validated();
         // É necessário fazer o fill para ai validar se teve alteração em algum atributo para ser atualizado
@@ -87,7 +89,7 @@ class PostController extends Controller
         //     ], 404);
         // }
         // Validar se o usuário foi ele que criou e assim pode excluir o post (PostPolicy.php)
-        Gate::authorize('delete', $post);
+        Gate::authorize('canChangePost', $post);
         // Soft delete do post
         $post->delete();
         // Disparando o evento PostDeleted
