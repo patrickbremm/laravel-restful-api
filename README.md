@@ -104,3 +104,20 @@ DB_DATABASE=../database/database.sqlite
 
 ### Fazer com que o retorno do Post traga o objeto User também
 `php artisan make:resource PostResource`
+
+### Limpar Cache de configuração para executar testes
+`php artisan config:clear`
+
+### Criar testes de recursos (feature)
+`php artisan make:test UserTest`
+
+### Criar testes unitários
+`php artisan make:test UserTest --unit`
+
+### Execução dos testes unitários em paralelos
+`composer require brianium/paratest --dev`
+`php artisan test --parallel`
+`php artisan test --parallel --processes=4`
+
+### Gerar relatório de Cobertura de Testes
+`php artisan test --coverage`
