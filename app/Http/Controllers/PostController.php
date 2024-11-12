@@ -9,6 +9,7 @@ use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -24,11 +25,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postRepository->all();
-        return response()->json([
-            "ok" => true, 
-            'posts' => PostResource::collection($posts) // Usa a coleção de recursos
-        ], 200);
+        try {
+            $posts = $this->postRepository->all();
+            return response()->json([
+                "ok" => true, 
+                'posts' => PostResource::collection($posts) // Usa a coleção de recursos
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error('Failed to fetch posts: ' . $e->getMessage());
+            return response()->json([
+                'ok' => false,
+                'message' => 'Failed to retrieve posts. Please try again later.',
+            ], 500);
+        }
     }
 
     /**
