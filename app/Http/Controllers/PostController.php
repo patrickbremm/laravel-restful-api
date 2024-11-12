@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PostDeleted;
 use App\Models\Post;
+use App\Repositories\PostRepositoryInterface;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
@@ -11,12 +12,19 @@ use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    protected $postRepository;
+
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = $this->postRepository->all();
         return response()->json([
             "ok" => true, 
             'posts' => PostResource::collection($posts) // Usa a coleção de recursos
