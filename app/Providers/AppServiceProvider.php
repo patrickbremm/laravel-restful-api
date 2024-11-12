@@ -6,6 +6,8 @@ use App\Events\PostDeleted;
 use App\Listeners\LogPostDeletion;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\PostRepositoryInterface;
+use App\Repositories\PostRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
     }
 
     /**
